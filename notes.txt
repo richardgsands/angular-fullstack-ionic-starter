@@ -1,3 +1,83 @@
 Gruntfile
 
 appPath - client folder
+
+
+
+
+WORKING OUTPUT
+
+rsns@UKLOMACRSNS ~/w/c/y/tmp> grunt serve
+Running "serve" task
+
+Running "clean:server" (clean) task
+Cleaning .tmp...OK
+
+Running "env:all" (env) task
+
+Running "injector:sass" (injector) task
+Missing option `template`, using `dest` as template instead
+Injecting scss files (4 files)
+
+Running "concurrent:server" (concurrent) task
+    
+    Running "jade:compile" (jade) task
+    File .tmp/app/account/login/login.html created.
+    File .tmp/app/account/settings/settings.html created.
+    File .tmp/app/account/signup/signup.html created.
+    File .tmp/app/admin/admin.html created.
+    File .tmp/app/main/main.html created.
+    File .tmp/components/modal/modal.html created.
+    File .tmp/components/navbar/navbar.html created.
+    
+    Done, without errors.
+    
+    
+    Execution Time (2015-01-28 14:08:46 UTC)
+    loading tasks   90ms  ▇▇▇▇▇▇▇▇▇▇ 20%
+    jade:compile   357ms  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 80%
+    Total 448ms
+        
+    Running "sass:server" (sass) task
+    
+    Done, without errors.
+    
+    
+    Execution Time (2015-01-28 14:08:46 UTC)
+    loading tasks  97ms  ▇▇▇▇ 8%
+    sass:server    1.1s  ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇ 92%
+    Total 1.2s
+    
+Running "injector:scripts" (injector) task
+Missing option `template`, using `dest` as template instead
+Injecting js files (13 files)
+
+Running "injector:sass" (injector) task
+Missing option `template`, using `dest` as template instead
+Injecting scss files (4 files)
+
+Running "injector:css" (injector) task
+Missing option `template`, using `dest` as template instead
+>> Nothing changed
+
+Running "wiredep:target" (wiredep) task
+
+Running "autoprefixer:dist" (autoprefixer) task
+File .tmp/app/app.css created.
+
+Running "express:dev" (express) task
+Starting background Express server
+debugger listening on port 5858
+Express server listening on 9000, in development mode
+
+Running "wait" task
+>> Waiting for server reload...
+finished populating users
+Done waiting!
+
+Running "open:server" (open) task
+
+Running "watch" task
+Waiting...
+GET /api/things 200 58ms
+

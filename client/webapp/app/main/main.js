@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('tmpApp')
+angular.module('starterApp')
   .config(function ($stateProvider) {
     $stateProvider
       .state('main', {

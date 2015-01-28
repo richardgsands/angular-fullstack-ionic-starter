@@ -2,6 +2,7 @@
 'use strict';
 
 module.exports = function (grunt) {
+  console.log("UPDATED!");
   var localConfig;
   try {
     localConfig = require('./server/config/local.env');
@@ -28,17 +29,23 @@ module.exports = function (grunt) {
     // Project settings
     pkg: grunt.file.readJSON('package.json'),
     yeoman: {
-      // configurable paths
-      client: require('./bower.json').appPath || 'client',
-      // TODO: Add commonPath and ionicPath, refactor appPath to webappPath
-      // TODO: Move common, ionic and webapp to a new 'client' folder
+      // RGS: Removed client and created keys for each part of the front end
+      // RGS: Removed ability client path to override in bower.json (as in angular-fullstack) as it would be insanely difficult to support a flexibile relationship between different bits of the frontend!
+      clientBower:  'client/bower_components',
+      clientCommon: 'client/common',
+      clientWebapp: 'client/webapp',
+      clientIonic:  'client/ionic',
+
+      bowerFromWebappIndexHtml: '../',
+      bowerFromIonicIndexHtml: '../',
+      
       dist: 'dist'
-      // TODO: Refactor dist to webapp-dist (Ionic doesn't need a dist folder)
+      // TODO: Add distIonic (ionic www folder...)
     },
     express: {
       options: {
         port: process.env.PORT || 9000
-        // TODO: Need a port for (a) webapp and server, (b) ionic www folder - maybe 9001
+        // TODO: Need a port for (a) webapp and server, (b) ionic www folder (development only) - maybe 9001
       },
       dev: {
         options: {
@@ -55,61 +62,77 @@ module.exports = function (grunt) {
     open: {
       server: {
         url: 'http://localhost:<%= express.options.port %>'
-      }
+      },
+      // TODO: Ionic (development only)
+      // ionic: {
+      //   url: 'http://localhost:9001'
+      // }
     },
     watch: {
       injectJS: {
+        // TODO: include common
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '!<%= yeoman.client %>/{app,components}/**/*.mock.js',
-          '!<%= yeoman.client %>/app/app.js'],
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.js',
+          '!<%= yeoman.clientWebapp %>/{app,components}/**/*.spec.js',
+          '!<%= yeoman.clientWebapp %>/{app,components}/**/*.mock.js',
+          '!<%= yeoman.clientWebapp %>/app/app.js'],
         tasks: ['injector:scripts']
       },
+      // TODO: add injectJsIonic
       injectCss: {
+        // TODO: include common
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.css'
         ],
         tasks: ['injector:css']
       },
+      // TODO: injectCssIonic
       mochaTest: {
         files: ['server/**/*.spec.js'],
         tasks: ['env:test', 'mochaTest']
       },
       jsTest: {
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '<%= yeoman.client %>/{app,components}/**/*.mock.js'
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.spec.js',
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.mock.js'
         ],
         tasks: ['newer:jshint:all', 'karma']
       },
+      // TODO: TESTING add jsTestCommon, jsTestIonic
       injectSass: {
+        // TODO: include common
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.{scss,sass}'],
         tasks: ['injector:sass']
       },
+      // TODO: injectSassIonic
       sass: {
+        // TODO: include common
         files: [
-          '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}'],
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.{scss,sass}'],
         tasks: ['sass', 'autoprefixer']
       },
+      // TODO: sassIonic
       jade: {
+        // TODO: include common
         files: [
-          '<%= yeoman.client %>/{app,components}/*',
-          '<%= yeoman.client %>/{app,components}/**/*.jade'],
+          '<%= yeoman.clientWebapp %>/{app,components}/*',
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.jade'],
         tasks: ['jade']
       },
+      // TODO: jadeIonic
       gruntfile: {
         files: ['Gruntfile.js']
       },
       livereload: {
+        // TODO: Include common, ionic
         files: [
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.css',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.html',
-          '{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-          '!{.tmp,<%= yeoman.client %>}{app,components}/**/*.spec.js',
-          '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js',
-          '<%= yeoman.client %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+          '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.css',
+          '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.html',
+          '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.js',
+          '!{.tmp,<%= yeoman.clientWebapp %>}{app,components}/**/*.spec.js',
+          '!{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.mock.js',
+          '<%= yeoman.clientWebapp %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
         ],
         options: {
           livereload: true
@@ -130,7 +153,8 @@ module.exports = function (grunt) {
     // Make sure code styles are up to par and there are no obvious mistakes
     jshint: {
       options: {
-        jshintrc: '<%= yeoman.client %>/.jshintrc',
+        // TODO: TESTING: Include common, ionic
+        jshintrc: '<%= yeoman.clientWebapp %>/.jshintrc',
         reporter: require('jshint-stylish')
       },
       server: {
@@ -149,14 +173,16 @@ module.exports = function (grunt) {
         src: ['server/**/*.spec.js']
       },
       all: [
-        '<%= yeoman.client %>/{app,components}/**/*.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.spec.js',
-        '!<%= yeoman.client %>/{app,components}/**/*.mock.js'
+        // TODO: TESTING: Include common, ionic
+        '<%= yeoman.clientWebapp %>/{app,components}/**/*.js',
+        '!<%= yeoman.clientWebapp %>/{app,components}/**/*.spec.js',
+        '!<%= yeoman.clientWebapp %>/{app,components}/**/*.mock.js'
       ],
       test: {
+        // TODO: TESTING: Include common, ionic
         src: [
-          '<%= yeoman.client %>/{app,components}/**/*.spec.js',
-          '<%= yeoman.client %>/{app,components}/**/*.mock.js'
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.spec.js',
+          '<%= yeoman.clientWebapp %>/{app,components}/**/*.mock.js'
         ]
       }
     },
@@ -230,11 +256,12 @@ module.exports = function (grunt) {
     // Automatically inject Bower components into the app
     wiredep: {
       target: {
-        src: '<%= yeoman.client %>/index.html',
-        ignorePath: '<%= yeoman.client %>/',
+        src: '<%= yeoman.clientWebapp %>/index.html',
+        ignorePath: ['<%= yeoman.bowerFromWebappIndexHtml %>'],
         exclude: [/bootstrap-sass-official/, /bootstrap.js/, '/json3/', '/es5-shim/', /bootstrap.css/, /font-awesome.css/ ]
       }
     },
+    // TODO: wiredepIonic
 
     // Renames files for browser caching purposes
     rev: {
@@ -249,16 +276,18 @@ module.exports = function (grunt) {
         }
       }
     },
+    // No need for revIonic
 
     // Reads HTML for usemin blocks to enable smart builds that automatically
     // concat, minify and revision files. Creates configurations in memory so
     // additional tasks can operate on them
     useminPrepare: {
-      html: ['<%= yeoman.client %>/index.html'],
+      html: ['<%= yeoman.clientWebapp %>/index.html'],
       options: {
         dest: '<%= yeoman.dist %>/public'
       }
     },
+    // No need for useminPrepareIonic
 
     // Performs rewrites based on rev and the useminPrepare configuration
     usemin: {
@@ -278,29 +307,34 @@ module.exports = function (grunt) {
         }
       }
     },
+    // No need for useminIonic
 
     // The following *-min tasks produce minified files in the dist folder
     imagemin: {
       dist: {
+        // Include common
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/assets/images',
+          cwd: '<%= yeoman.clientWebapp %>/assets/images',
           src: '{,*/}*.{png,jpg,jpeg,gif}',
           dest: '<%= yeoman.dist %>/public/assets/images'
         }]
       }
     },
+    // No need for imageminIonic
 
     svgmin: {
       dist: {
+        // Include common
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>/assets/images',
+          cwd: '<%= yeoman.clientWebapp %>/assets/images',
           src: '{,*/}*.svg',
           dest: '<%= yeoman.dist %>/public/assets/images'
         }]
       }
     },
+    // No need for svgminIonic
 
     // Allow the use of non-minsafe AngularJS files. Automatically makes it
     // minsafe compatible so Uglify does not destroy the ng references
@@ -314,12 +348,13 @@ module.exports = function (grunt) {
         }]
       }
     },
+    // No need for ngAnnotateIonic (as we are not minifying Ionic files for now...)
 
     // Package all the html partials into a single javascript payload
     ngtemplates: {
       options: {
         // This should be the name of your apps angular module
-        module: 'tmpApp',
+        module: 'starterApp',
         htmlmin: {
           collapseBooleanAttributes: true,
           collapseWhitespace: true,
@@ -331,8 +366,9 @@ module.exports = function (grunt) {
         },
         usemin: 'app/app.js'
       },
+      // TODO: Include common here (i.e. in cwd) - required for build task to work properly
       main: {
-        cwd: '<%= yeoman.client %>',
+        cwd: '<%= yeoman.clientDesktop %>',
         src: ['{app,components}/**/*.html'],
         dest: '.tmp/templates.js'
       },
@@ -342,6 +378,7 @@ module.exports = function (grunt) {
         dest: '.tmp/tmp-templates.js'
       }
     },
+    // TODO (Future): Do ngtemplates (grunt-angular-templates) for Ionic as well
 
     // Replace Google CDN references
     cdnify: {
@@ -353,10 +390,11 @@ module.exports = function (grunt) {
     // Copies remaining files to places other tasks can use
     copy: {
       dist: {
+        // TODO: Include common here (i.e. in cwd)
         files: [{
           expand: true,
           dot: true,
-          cwd: '<%= yeoman.client %>',
+          cwd: '<%= yeoman.clientDesktop %>',
           dest: '<%= yeoman.dist %>/public',
           src: [
             '*.{ico,png,txt}',
@@ -380,13 +418,15 @@ module.exports = function (grunt) {
           ]
         }]
       },
+      // TODO: Include common here (i.e. in cwd)
       styles: {
         expand: true,
-        cwd: '<%= yeoman.client %>',
+        cwd: '<%= yeoman.clientDesktop %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
       }
     },
+    // TODO: copyIonic
 
     buildcontrol: {
       options: {
@@ -409,8 +449,10 @@ module.exports = function (grunt) {
         }
       }
     },
+    // No ionic stuff here
 
     // Run some tasks in parallel to speed up the build process
+    // TODO: Add the relevant ionic tasks in here aswell
     concurrent: {
       server: [
         'jade',
@@ -483,9 +525,10 @@ module.exports = function (grunt) {
             debug: false
           }
         },
+        // TODO: Include common
         files: [{
           expand: true,
-          cwd: '<%= yeoman.client %>',
+          cwd: '<%= yeoman.clientWebapp %>',
           src: [
             '{app,components}/**/*.jade'
           ],
@@ -494,22 +537,26 @@ module.exports = function (grunt) {
         }]
       }
     },
+    // TODO: jadeIonic
 
     // Compiles Sass to CSS
     sass: {
       server: {
         options: {
+          // TODO: Include common
           loadPath: [
-            '<%= yeoman.client %>/bower_components',
-            '<%= yeoman.client %>/app',
-            '<%= yeoman.client %>/components'
+            '<%= yeoman.clientBower %>',
+            '<%= yeoman.clientWebapp %>/app',
+            '<%= yeoman.clientWebapp %>/components'
           ],
           compass: false
         },
+        // TODO: Include common (file might be common.scss or something)
         files: {
-          '.tmp/app/app.css' : '<%= yeoman.client %>/app/app.scss'
+          '.tmp/app/app.css' : '<%= yeoman.clientWebapp %>/app/app.scss'
         }
       }
+      // TODO: ionic
     },
 
     injector: {
@@ -520,6 +567,7 @@ module.exports = function (grunt) {
       scripts: {
         options: {
           transform: function(filePath) {
+            //filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<script src="' + filePath + '"></script>';
@@ -528,12 +576,15 @@ module.exports = function (grunt) {
           endtag: '<!-- endinjector -->'
         },
         files: {
-          '<%= yeoman.client %>/index.html': [
-              ['{.tmp,<%= yeoman.client %>}/{app,components}/**/*.js',
-               '!{.tmp,<%= yeoman.client %>}/app/app.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.spec.js',
-               '!{.tmp,<%= yeoman.client %>}/{app,components}/**/*.mock.js']
+          '<%= yeoman.clientWebapp %>/index.html': [
+              // TODO: Include common
+              [
+               '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.js',
+               '!{.tmp,<%= yeoman.clientWebapp %>}/app/app.js',
+               '!{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.spec.js',
+               '!{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.mock.js']
             ]
+          // TODO: Do this for ionic??
         }
       },
 
@@ -541,40 +592,54 @@ module.exports = function (grunt) {
       sass: {
         options: {
           transform: function(filePath) {
-            filePath = filePath.replace('/client/app/', '');
-            filePath = filePath.replace('/client/components/', '');
+            //filePath = filePath.replace('/client/app/', '');
+            //filePath = filePath.replace('/client/components/', '');
+            filePath = filePath.replace('/client/webapp/app/', '');
+            filePath = filePath.replace('/client/webapp/components/', '');
+            // TODO: Include common
             return '@import \'' + filePath + '\';';
           },
           starttag: '// injector',
           endtag: '// endinjector'
         },
+        // TODO: Include common
         files: {
-          '<%= yeoman.client %>/app/app.scss': [
-            '<%= yeoman.client %>/{app,components}/**/*.{scss,sass}',
-            '!<%= yeoman.client %>/app/app.{scss,sass}'
+          '<%= yeoman.clientWebapp %>/app/app.scss': [
+            '<%= yeoman.clientWebapp %>/{app,components}/**/*.{scss,sass}',
+            '!<%= yeoman.clientWebapp %>/app/app.{scss,sass}'
           ]
         }
       },
+      // TODO: add sassIonic
 
       // Inject component css into index.html
       css: {
         options: {
           transform: function(filePath) {
-            filePath = filePath.replace('/client/', '');
+            //filePath = filePath.replace('/client/', '');
+            filePath = filePath.replace('/client/webapp/', '');
+
             filePath = filePath.replace('/.tmp/', '');
             return '<link rel="stylesheet" href="' + filePath + '">';
           },
           starttag: '<!-- injector:css -->',
           endtag: '<!-- endinjector -->'
         },
+        // TODO: Include common
         files: {
-          '<%= yeoman.client %>/index.html': [
-            '<%= yeoman.client %>/{app,components}/**/*.css'
+          '<%= yeoman.clientWebapp %>/index.html': [
+            '<%= yeoman.clientWebapp %>/{app,components}/**/*.css'
           ]
         }
       }
+      // TODO: add cssIonic
+
     },
   });
+
+
+  // grunt.loadNpmTasks('grunt-debug-task');  // To debug in node-inspector
+
 
   // Used for delaying livereload until after server has restarted
   grunt.registerTask('wait', function () {
