@@ -14,6 +14,8 @@ grunt serve
 ##### Dependencies
 If you don't have it already, you'll need Sass: ```gem install sass```
 
+You'll also need MongoDB to be up and running: http://docs.mongodb.org/manual/installation/
+
 ### Implemented so far
 * Grunt development workflow to serve webapp and ionic app in two browser tabs
 * Frontend (client) directory with
@@ -23,6 +25,7 @@ If you don't have it already, you'll need Sass: ```gem install sass```
   
 ### Next steps
 * Wire up grunt dist tasks to work with new client folder structure
+* Implement user login in Ionic app
 * Implement shared components (e.g. angular directives, etc)
 * Implement shared fonts
 * Support plain HTML as well as Jade for webapp
