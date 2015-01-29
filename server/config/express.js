@@ -52,6 +52,7 @@ module.exports = function(app) {
     app.use(express.static(path.join(config.root, '.tmp')));
     // RGS: Include common
     app.use(express.static(path.join(config.root, 'client')));
+    app.use('/ionic', express.static(path.join(config.root, 'dist-ionic/www')));
     // app.use(express.static(path.join(config.root, 'client/common')));
     // app.use(express.static(path.join(config.root, 'client/webapp')));
     app.set('appPath', path.join(config.root, 'client/webapp'));

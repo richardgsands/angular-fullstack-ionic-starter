@@ -64,7 +64,7 @@ module.exports = function (grunt) {
       },
       // TODO: Ionic (development only)
       ionic: {
-         url: 'http://localhost:<%= express.options.port %>'
+         url: 'http://localhost:<%= express.options.port %>/ionic'
       }
     },
     watch: {
@@ -212,7 +212,10 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      server: '.tmp'
+      server: [
+        '.tmp',
+        'dist-ionic/www'
+      ]
     },
 
     // Add vendor prefixed styles
@@ -429,15 +432,28 @@ module.exports = function (grunt) {
           ]
         }]
       },
-      // TODO: Include common here (i.e. in cwd)
+      // TODO: Include common here
+      // TODO: Not sure if styles target is used anywhere?
       styles: {
         expand: true,
         cwd: '<%= yeoman.clientDesktop %>',
         dest: '.tmp/',
         src: ['{app,components}/**/*.css']
+      },
+      // Ionic
+      ionicCommonFromTmp: {
+        cwd: '.tmp',
+        src: 'common.css',
+        dest: 'dist-ionic/www/css',
+        expand: true
+      },
+      ionicWwwFromClient: {
+        cwd: '<%= yeoman.clientIonic %>/www',
+        src: '**/*',
+        dest: 'dist-ionic/www',
+        expand: true
       }
     },
-    // TODO: copyIonic
 
     buildcontrol: {
       options: {
@@ -487,6 +503,11 @@ module.exports = function (grunt) {
         'sass',
         'imagemin',
         'svgmin'
+      ],
+
+      copyToIonicDist: [
+        'copy:ionicCommonFromTmp',
+        'copy:ionicWwwFromClient'
       ]
     },
 
@@ -574,6 +595,18 @@ module.exports = function (grunt) {
         },
         files: {
           '.tmp/app/app.css' : '<%= yeoman.clientWebapp %>/app/app.scss'
+        }
+      },
+      ionic: {
+        options: {
+          loadPath: [
+            '<%= yeoman.clientIonic %>/scss'
+            // TODO: Add components
+          ],
+          compass: false
+        },
+        files: {
+          'dist-ionic/www/css/ionic.app.css' : '<%= yeoman.clientIonic %>/scss/ionic.app.scss'
         }
       }
       // TODO: ionic
@@ -691,6 +724,8 @@ module.exports = function (grunt) {
     this.async();
   });
 
+  // TODO: Add 'concurrent:copyToIonicDist' to all grunt tasks where needed (currently working in grunt serve)
+
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
       return grunt.task.run(['build', 'env:all', 'env:prod', 'express:prod', 'wait', 'open', 'express-keepalive']);
@@ -702,6 +737,7 @@ module.exports = function (grunt) {
         'env:all',
         'injector:sass', 
         'concurrent:server',
+        'concurrent:copyToIonicDist',
         'injector',
         'wiredep',
         'autoprefixer',
@@ -714,6 +750,7 @@ module.exports = function (grunt) {
       'env:all',
       'injector:sass', 
       'concurrent:server',
+      'concurrent:copyToIonicDist',
       'injector',
       'wiredep',
       'autoprefixer',
