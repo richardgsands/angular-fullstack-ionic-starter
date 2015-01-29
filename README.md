@@ -4,7 +4,13 @@ The motivation behind Angular Fullstack Ionic is to streamline the development o
 
 It is based on the brilliant Yeoman angular-fullstack project.
 
+##### Get started
 *Note this project in the early stages - so please read the points below before jumping in!*
+```
+npm install
+bower install
+grunt serve
+```
 
 ### Implemented so far
 * Grunt development workflow to serve webapp and ionic app in two browser tabs
