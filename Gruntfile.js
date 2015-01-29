@@ -2,7 +2,6 @@
 'use strict';
 
 module.exports = function (grunt) {
-  console.log("UPDATED!");
   var localConfig;
   try {
     localConfig = require('./server/config/local.env');
@@ -64,9 +63,9 @@ module.exports = function (grunt) {
         url: 'http://localhost:<%= express.options.port %>'
       },
       // TODO: Ionic (development only)
-      // ionic: {
-      //   url: 'http://localhost:9001'
-      // }
+      ionic: {
+         url: 'http://localhost:<%= express.options.port %>'
+      }
     },
     watch: {
       injectJS: {
@@ -86,6 +85,7 @@ module.exports = function (grunt) {
         ],
         tasks: ['injector:css']
       },
+      // TODO: injectCssCommon
       // TODO: injectCssIonic
       mochaTest: {
         files: ['server/**/*.spec.js'],
@@ -100,17 +100,27 @@ module.exports = function (grunt) {
       },
       // TODO: TESTING add jsTestCommon, jsTestIonic
       injectSass: {
-        // TODO: include common
         files: [
           '<%= yeoman.clientWebapp %>/{app,components}/**/*.{scss,sass}'],
         tasks: ['injector:sass']
+      },
+      injectSassCommon: {
+        files: [
+          '<%= yeoman.clientCommon %>/{app,components}/**/*.{scss,sass}'],
+        tasks: ['injector:sassCommon']
       },
       // TODO: injectSassIonic
       sass: {
         // TODO: include common
         files: [
-          '<%= yeoman.clientWebapp %>/{app,components}/**/*.{scss,sass}'],
-        tasks: ['sass', 'autoprefixer']
+          '<%= yeoman.clientWebapp %>/{app,components,scss}/**/*.{scss,sass}'],
+        tasks: ['sass:webapp', 'autoprefixer']
+      },
+      sassCommon: {
+        // TODO: include common
+        files: [
+          '<%= yeoman.clientCommon %>/{,components,scss}/**/*.{scss,sass}'],
+        tasks: ['sass:common', 'autoprefixer']
       },
       // TODO: sassIonic
       jade: {
@@ -127,6 +137,7 @@ module.exports = function (grunt) {
       livereload: {
         // TODO: Include common, ionic
         files: [
+          '.tmp/common.css',
           '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.css',
           '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.html',
           '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.js',
@@ -541,9 +552,19 @@ module.exports = function (grunt) {
 
     // Compiles Sass to CSS
     sass: {
-      server: {
+      common: {
         options: {
-          // TODO: Include common
+          loadPath: [
+            '<%= yeoman.clientCommon %>',
+          ],
+          compass: false
+        },
+        files: {
+          '.tmp/common.css' : '<%= yeoman.clientCommon %>/auto.scss'
+        }
+      },
+      webapp: {
+        options: {
           loadPath: [
             '<%= yeoman.clientBower %>',
             '<%= yeoman.clientWebapp %>/app',
@@ -551,7 +572,6 @@ module.exports = function (grunt) {
           ],
           compass: false
         },
-        // TODO: Include common (file might be common.scss or something)
         files: {
           '.tmp/app/app.css' : '<%= yeoman.clientWebapp %>/app/app.scss'
         }
@@ -567,7 +587,6 @@ module.exports = function (grunt) {
       scripts: {
         options: {
           transform: function(filePath) {
-            //filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/.tmp/', '');
             return '<script src="' + filePath + '"></script>';
@@ -592,8 +611,6 @@ module.exports = function (grunt) {
       sass: {
         options: {
           transform: function(filePath) {
-            //filePath = filePath.replace('/client/app/', '');
-            //filePath = filePath.replace('/client/components/', '');
             filePath = filePath.replace('/client/webapp/app/', '');
             filePath = filePath.replace('/client/webapp/components/', '');
             // TODO: Include common
@@ -610,13 +627,30 @@ module.exports = function (grunt) {
           ]
         }
       },
+      sassCommon: {
+        options: {
+          transform: function(filePath) {
+            filePath = filePath.replace('/client/common/components/', '');
+            // TODO: Include common
+            return '@import \'' + filePath + '\';';
+          },
+          starttag: '// injector',
+          endtag: '// endinjector'
+        },
+        // TODO: Include common
+        files: {
+          '<%= yeoman.clientCommon %>/auto.scss': [
+            '<%= yeoman.clientCommon %>/components/**/*.{scss,sass}',
+            '!<%= yeoman.clientCommon %>/auto.{scss,sass}'
+          ]
+        }
+      },
       // TODO: add sassIonic
 
       // Inject component css into index.html
       css: {
         options: {
           transform: function(filePath) {
-            //filePath = filePath.replace('/client/', '');
             filePath = filePath.replace('/client/webapp/', '');
 
             filePath = filePath.replace('/.tmp/', '');

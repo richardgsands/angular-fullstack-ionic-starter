@@ -3,13 +3,22 @@ div(ng-include='"components/navbar/navbar.html"')
 header#banner.hero-unit
   .container
     h1 'Allo, 'Allo!
-    p.lead Kick-start your next web app with Angular Fullstack
+    p.lead Kick-start your next web app with Angular Fullstack Ionic
     img(src='common/assets/images/yeoman.png', alt='I\'m Yeoman')
 
 .container
   .row
     .col-lg-12
-      h1.page-header Features:
+      h1.page-header Angular Fullstack Ionic
+      h2 Webapp
+      p This is your webapp
+      .panel.my-class
+        .panel-body It includes common assets and styles (client/common/assets and client/common/scss)
+      .panel.webapp-class
+        .panel-body It also includes webapp assets and styles (client/webapp/assets and client/webapp/scss)
+  .row
+    .col-lg-12
+      h3 Based on Angular Fullstack
       ul.nav.nav-tabs.nav-stacked.col-md-4.col-lg-4.col-sm-6(ng-repeat='thing in awesomeThings')
         li
           a(href='#', tooltip='{{thing.info}}')
@@ -23,3 +32,9 @@ footer.footer
       a(href='https://twitter.com/tyhenkel') @tyhenkel
       = ' | '
       a(href='https://github.com/DaftMonk/generator-angular-fullstack/issues?state=open') Issues
+    p
+      | Angular Fullstack Ionic v0.0.1
+      = ' | '
+      a(href='https://twitter.com/richardgsands') @richardgsands
+      = ' | '
+      a(href='https://github.com/richardgsands/generator-angular-fullstack-ionic/issues?state=open') Issues
