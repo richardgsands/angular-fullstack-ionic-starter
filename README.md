@@ -11,6 +11,8 @@ npm install
 bower install
 grunt serve
 ```
+##### Dependencies
+If you don't have it already, you'll need Sass: ```gem install sass```
 
 ### Implemented so far
 * Grunt development workflow to serve webapp and ionic app in two browser tabs
