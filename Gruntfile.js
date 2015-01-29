@@ -120,13 +120,13 @@ module.exports = function (grunt) {
         // TODO: include common
         files: [
           '<%= yeoman.clientCommon %>/{,components,scss}/**/*.{scss,sass}'],
-        tasks: ['sass:common', 'autoprefixer']
+        tasks: ['sass:common', 'autoprefixer', 'copy:ionicCommonFromTmp']
       },
       sassIonic: {
         // TODO: include common
         files: [
           '<%= yeoman.clientIonic %>/{,components,scss}/**/*.{scss,sass}'],
-        tasks: ['sass:ionic', 'copy:ionicCommonFromTmp']
+        tasks: ['sass:ionic']
       },
       jade: {
         // TODO: include common
