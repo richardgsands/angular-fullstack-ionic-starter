@@ -1,0 +1,14 @@
+<!--
+This template loads for the 'tab.thing-detail' state (app.js)
+'thing' is a $scope variable created in the ThingsCtrl controller (controllers.js)
+The ThingsCtrl pulls data from the Things service (service.js)
+The Things service returns an array of thing data
+-->
+<ion-view view-title="">
+  <ion-content class="padding">
+    <h3>{{thing.name}}</h3>
+    <p>
+      {{thing.info}}
+    </p>
+  </ion-content>
+</ion-view>

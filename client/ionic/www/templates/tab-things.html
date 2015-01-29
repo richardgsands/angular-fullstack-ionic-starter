@@ -1,0 +1,9 @@
+<ion-view view-title="Awesome Things">
+  <ion-content>
+    <ion-list>
+      <ion-item ng-repeat="thing in things" type="item-text-wrap" href="#/tab/thing/{{thing._id}}">
+        <h2>{{thing.name}}</h2>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>

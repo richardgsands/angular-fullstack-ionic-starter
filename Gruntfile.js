@@ -122,7 +122,12 @@ module.exports = function (grunt) {
           '<%= yeoman.clientCommon %>/{,components,scss}/**/*.{scss,sass}'],
         tasks: ['sass:common', 'autoprefixer']
       },
-      // TODO: sassIonic
+      sassIonic: {
+        // TODO: include common
+        files: [
+          '<%= yeoman.clientIonic %>/{,components,scss}/**/*.{scss,sass}'],
+        tasks: ['sass:ionic', 'copy:ionicCommonFromTmp']
+      },
       jade: {
         // TODO: include common
         files: [
@@ -130,7 +135,12 @@ module.exports = function (grunt) {
           '<%= yeoman.clientWebapp %>/{app,components}/**/*.jade'],
         tasks: ['jade']
       },
-      // TODO: jadeIonic
+      htmlIonic: {
+        files:['<%= yeoman.clientIonic %>/www/**/*'],
+        tasks:['copy:ionicWwwFromClient']
+      },
+      // TODO: Set up jadeIonic
+      // TODO: Do we actually want to watch gruntfile - why?
       gruntfile: {
         files: ['Gruntfile.js']
       },
@@ -143,7 +153,8 @@ module.exports = function (grunt) {
           '{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.js',
           '!{.tmp,<%= yeoman.clientWebapp %>}{app,components}/**/*.spec.js',
           '!{.tmp,<%= yeoman.clientWebapp %>}/{app,components}/**/*.mock.js',
-          '<%= yeoman.clientWebapp %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}'
+          '<%= yeoman.clientWebapp %>/assets/images/{,*//*}*.{png,jpg,jpeg,gif,webp,svg}',
+          'dist-ionic/www/**/*'
         ],
         options: {
           livereload: true
