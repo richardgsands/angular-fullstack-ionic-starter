@@ -33,6 +33,5 @@ You'll also need MongoDB to be up and running: http://docs.mongodb.org/manual/in
 
 ### Get involved
 The eventual aim of this project is to create an extension to the Yeoman generator-angular-fullstack
-(Placeholder here: https://github.com/richardgsands/generator-angular-fullstack-ionic)
 
 Please contact @richardgsands if you'd like to help out!
